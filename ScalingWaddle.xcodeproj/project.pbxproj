@@ -16,6 +16,7 @@
 		31A7B3B12D6647B700949F08 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3A02D6647B700949F08 /* HeaderView.swift */; };
 		31A7B3B22D6647B700949F08 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3A12D6647B700949F08 /* MainViewController.swift */; };
 		31A7B3B32D6647B700949F08 /* MainModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3A32D6647B700949F08 /* MainModuleBuilder.swift */; };
+		31A7B3B52D6725DC00949F08 /* MainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B42D6725D300949F08 /* MainEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		31A7B3A32D6647B700949F08 /* MainModuleBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModuleBuilder.swift; sourceTree = "<group>"; };
 		31A7B3A52D6647B700949F08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31A7B3A62D6647B700949F08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		31A7B3B42D6725D300949F08 /* MainEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		31A7B39D2D6647B700949F08 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				31A7B3B42D6725D300949F08 /* MainEntity.swift */,
 				31A7B39C2D6647B700949F08 /* MainModulePresenter.swift */,
 			);
 			path = Presenter;
@@ -202,6 +205,7 @@
 				31A7B3AF2D6647B700949F08 /* MainModulePresenter.swift in Sources */,
 				31A7B3B02D6647B700949F08 /* DataTableViewCell.swift in Sources */,
 				31A7B3B12D6647B700949F08 /* HeaderView.swift in Sources */,
+				31A7B3B52D6725DC00949F08 /* MainEntity.swift in Sources */,
 				31A7B3B22D6647B700949F08 /* MainViewController.swift in Sources */,
 				31A7B3B32D6647B700949F08 /* MainModuleBuilder.swift in Sources */,
 			);

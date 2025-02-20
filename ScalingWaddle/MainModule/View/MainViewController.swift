@@ -54,11 +54,16 @@ extension MainViewController: MainModuleViewControllerProtocol {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        let sectionType = SectionType.allCases[section]
+        if sectionType == .main {
+            return 1
+        } else {
+            return 5
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -70,6 +75,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = HeaderView()
+        let sectionType = SectionType.allCases[section]
+        header.configure(sectionType)
         return header
     }
 }
