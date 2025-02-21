@@ -12,6 +12,7 @@ final class MainViewController: UIViewController {
     // MARK: - Dependency
     
     var presenter: MainModulePresenterProtocol?
+    var kids: [ChildModel] = []
     
     
     // MARK: - UI Elements
@@ -37,6 +38,7 @@ final class MainViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupUI() {
+        view.backgroundColor = .systemBackground
         view.addSubview(dataTableView)
         setupConstraints()
     }
@@ -58,18 +60,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         if sectionType == .main {
             return 1
         } else {
-            return 5
+            return kids.isEmpty ? 1 : kids.count + 1
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        SectionType.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DataCell", for: indexPath) as? DataTableViewCell else {
             return UITableViewCell()
         }
+        let sectionType = SectionType.allCases[indexPath.section]
+        cell.configure(sectionType)
         return cell
     }
     
@@ -77,7 +81,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let header = HeaderView()
         let sectionType = SectionType.allCases[section]
         header.configure(sectionType)
+        header.delegate = self
         return header
+    }
+}
+
+
+// MARK: - MainViewControllerDelegate
+
+extension MainViewController: MainViewControllerDelegate {
+    func childrenButtonTapped() {
+        if kids.count < 4 {
+            kids.append(ChildModel(name: "Borya", age: 12))
+            dataTableView.reloadData()
+        }
     }
 }
 

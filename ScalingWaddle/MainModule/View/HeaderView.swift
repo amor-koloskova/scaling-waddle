@@ -7,7 +7,16 @@
 
 import UIKit
 
+protocol MainViewControllerDelegate: AnyObject {
+    func childrenButtonTapped()
+}
+
 final class HeaderView: UIView {
+    
+    // MARK: - Dependency
+    
+    weak var delegate: MainViewControllerDelegate?
+    
     
     // MARK: - UI Elements
     
@@ -18,13 +27,14 @@ final class HeaderView: UIView {
         return label
     }()
     
-    private let addChildrenButton: UIButton = {
+    private lazy var addChildrenButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.setTitle("Добавить ребенка", for: .normal)
         button.layer.cornerRadius = 22
         button.layer.borderWidth = 3
         button.layer.borderColor = UIColor.systemBlue.cgColor
+        button.addTarget(self, action: #selector(addChildrenButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -61,6 +71,14 @@ final class HeaderView: UIView {
     private func setup() {
         addSubview(headerLabel)
         setupConstraints()
+    }
+    
+    
+    // MARK: - Actions
+    
+    @objc
+    private func addChildrenButtonTapped() {
+        delegate?.childrenButtonTapped()
     }
 }
 
