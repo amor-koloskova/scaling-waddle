@@ -31,6 +31,7 @@ final class HeaderView: UIView {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.setTitle("Добавить ребенка", for: .normal)
+        button.backgroundColor = .systemBackground
         button.layer.cornerRadius = 22
         button.layer.borderWidth = 3
         button.layer.borderColor = UIColor.systemBlue.cgColor

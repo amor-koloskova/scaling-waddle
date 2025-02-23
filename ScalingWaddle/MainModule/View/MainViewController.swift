@@ -12,7 +12,12 @@ final class MainViewController: UIViewController {
     // MARK: - Dependency
     
     var presenter: MainModulePresenterProtocol?
-    var kids: [ChildModel] = []
+    
+    
+    // MARK: Private properties
+    
+    private var kids: [ChildModel] = []
+    private let sectionType = SectionType.allCases
     
     
     // MARK: - UI Elements
@@ -56,8 +61,7 @@ extension MainViewController: MainModuleViewControllerProtocol {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionType = SectionType.allCases[section]
-        if sectionType == .main {
+        if sectionType[section] == .main {
             return 1
         } else {
             return kids.isEmpty ? 1 : kids.count + 1
@@ -65,24 +69,26 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        SectionType.allCases.count
+        sectionType.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DataCell", for: indexPath) as? DataTableViewCell else {
             return UITableViewCell()
         }
-        let sectionType = SectionType.allCases[indexPath.section]
-        cell.configure(sectionType)
+        cell.configure(sectionType[indexPath.section])
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = HeaderView()
-        let sectionType = SectionType.allCases[section]
-        header.configure(sectionType)
+        header.configure(sectionType[section])
         header.delegate = self
         return header
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+         sectionType[section] == .child ?  FooterView() :  nil
     }
 }
 
