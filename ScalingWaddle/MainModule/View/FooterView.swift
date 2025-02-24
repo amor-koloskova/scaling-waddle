@@ -4,9 +4,18 @@
 //
 //  Created by Amor on 23.02.2025.
 //
+
 import UIKit
 
+protocol FooterViewDelegate: AnyObject {
+    func didTapClearButton()
+}
+
 final class FooterView: UIView {
+    
+    // MARK: - Dependency
+    
+    weak var delegate: FooterViewDelegate?
     
     // MARK: - UI Elements
     
@@ -38,16 +47,17 @@ final class FooterView: UIView {
     // MARK: - Private Methods
     
     private func setup() {
+        backgroundColor = .systemBackground
         addSubview(clearButton)
         setupConstraints()
     }
     
-    // MARK: - Actions
     
+    // MARK: - Actions
     
     @objc
     private func clearButtonTapped() {
-        
+        delegate?.didTapClearButton()
     }
 }
 
@@ -60,9 +70,9 @@ extension FooterView {
         NSLayoutConstraint.activate([
             clearButton.heightAnchor.constraint(equalToConstant: 44),
             clearButton.widthAnchor.constraint(equalToConstant: 192),
-            clearButton.topAnchor.constraint(equalTo: topAnchor),
+            clearButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             clearButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            clearButton.bottomAnchor.constraint(equalTo: bottomAnchor)])
+            clearButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)])
     }
     
 }

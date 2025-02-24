@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ChildModel {
-    let name: String
-    let age: Int
+struct UserModel {
+    let name: String?
+    let age: String?
+    let type: UserType
 }

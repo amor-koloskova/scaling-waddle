@@ -17,7 +17,7 @@
 		31A7B3B22D6647B700949F08 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3A12D6647B700949F08 /* MainViewController.swift */; };
 		31A7B3B32D6647B700949F08 /* MainModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3A32D6647B700949F08 /* MainModuleBuilder.swift */; };
 		31A7B3B52D6725DC00949F08 /* MainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B42D6725D300949F08 /* MainEntity.swift */; };
-		31A7B3B82D68E3AD00949F08 /* ChildModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B72D68E3AD00949F08 /* ChildModel.swift */; };
+		31A7B3B82D68E3AD00949F08 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B72D68E3AD00949F08 /* UserModel.swift */; };
 		31A7B3BA2D6B22B600949F08 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B92D6B22AE00949F08 /* FooterView.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 		31A7B3A52D6647B700949F08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31A7B3A62D6647B700949F08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		31A7B3B42D6725D300949F08 /* MainEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntity.swift; sourceTree = "<group>"; };
-		31A7B3B72D68E3AD00949F08 /* ChildModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildModel.swift; sourceTree = "<group>"; };
+		31A7B3B72D68E3AD00949F08 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		31A7B3B92D6B22AE00949F08 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,7 +136,7 @@
 		31A7B3B62D68E39300949F08 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				31A7B3B72D68E3AD00949F08 /* ChildModel.swift */,
+				31A7B3B72D68E3AD00949F08 /* UserModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -214,7 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31A7B3B82D68E3AD00949F08 /* ChildModel.swift in Sources */,
+				31A7B3B82D68E3AD00949F08 /* UserModel.swift in Sources */,
 				31A7B3AD2D6647B700949F08 /* AppDelegate.swift in Sources */,
 				31A7B3AE2D6647B700949F08 /* SceneDelegate.swift in Sources */,
 				31A7B3BA2D6B22B600949F08 /* FooterView.swift in Sources */,

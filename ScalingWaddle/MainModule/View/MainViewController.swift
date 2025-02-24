@@ -16,8 +16,7 @@ final class MainViewController: UIViewController {
     
     // MARK: Private properties
     
-    private var kids: [ChildModel] = []
-    private let sectionType = SectionType.allCases
+    private let sectionType = UserType.allCases
     
     
     // MARK: - UI Elements
@@ -28,6 +27,7 @@ final class MainViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
     
@@ -53,7 +53,24 @@ final class MainViewController: UIViewController {
 // MARK: - MainModuleViewControllerProtocol
 
 extension MainViewController: MainModuleViewControllerProtocol {
+    func reloadTableView() {
+        dataTableView.reloadData()
+    }
     
+    func showActionSheet() {
+        let actionSheet = UIAlertController(title: "Настройки",
+                                            message: "Пожалуйста, выберите опцию",
+                                            preferredStyle: .actionSheet)
+        let clearAction = UIAlertAction(title: "Сбросить данные",
+                                        style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.presenter?.clearAllData()
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        actionSheet.addAction(clearAction)
+        actionSheet.addAction(cancelAction)
+        self.present(actionSheet, animated: true)
+    }
 }
 
 
@@ -61,46 +78,69 @@ extension MainViewController: MainModuleViewControllerProtocol {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if sectionType[section] == .main {
-            return 1
-        } else {
-            return kids.isEmpty ? 1 : kids.count + 1
-        }
+        guard let presenter else { return 0 }
+        return presenter.numberOfRows(in: section)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        sectionType.count
+        guard let presenter else { return 0 }
+        return presenter.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DataCell", for: indexPath) as? DataTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(sectionType[indexPath.section])
+        let userData = presenter?.userData(at: indexPath)
+        cell.configure(sectionType[indexPath.section], with: userData ?? UserModel(name: nil, age: nil, type: .adult),
+                       target: self,
+                       action: #selector(textFieldDidChange(_:)))
+        cell.removeButtonAction = { [weak self] in
+            self?.presenter?.removeButtonPressed(at: indexPath)
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = HeaderView()
-        header.configure(sectionType[section])
+        header.configure(userType: sectionType[section], childrenCount: presenter?.getChildrenDataSource().count ?? 0)
         header.delegate = self
         return header
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-         sectionType[section] == .child ?  FooterView() :  nil
+        let footer = FooterView()
+        footer.delegate = self
+        return sectionType[section] == .child ? footer :  nil
+    }
+    
+    
+    // MARK: - Actions
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let cell = textField.superview?.superview as? DataTableViewCell,
+              let indexPath = dataTableView.indexPath(for: cell) else { return }
+        
+        let updatedData = cell.getUpdatedUserData()
+        presenter?.updateUserData(at: indexPath, name: updatedData.name, age: updatedData.age)
     }
 }
 
 
-// MARK: - MainViewControllerDelegate
+// MARK: - HeaderViewDelegate
 
-extension MainViewController: MainViewControllerDelegate {
-    func childrenButtonTapped() {
-        if kids.count < 4 {
-            kids.append(ChildModel(name: "Borya", age: 12))
-            dataTableView.reloadData()
-        }
+extension MainViewController: HeaderViewDelegate {
+    func didTapChildrenButton() {
+        presenter?.addChildButtonPressed()
+    }
+}
+
+
+// MARK: - FooterViewDelegate
+
+extension MainViewController: FooterViewDelegate {
+    func didTapClearButton() {
+        presenter?.clearButtonPressed()
     }
 }
 
@@ -115,7 +155,7 @@ extension MainViewController {
             dataTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             dataTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dataTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dataTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            dataTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SectionType: Int, CaseIterable {
-    case main
+enum UserType: Int, CaseIterable {
+    case adult
     case child
 }

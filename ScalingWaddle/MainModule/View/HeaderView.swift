@@ -7,20 +7,20 @@
 
 import UIKit
 
-protocol MainViewControllerDelegate: AnyObject {
-    func childrenButtonTapped()
+protocol HeaderViewDelegate: AnyObject {
+    func didTapChildrenButton()
 }
 
 final class HeaderView: UIView {
     
     // MARK: - Dependency
     
-    weak var delegate: MainViewControllerDelegate?
+    weak var delegate: HeaderViewDelegate?
     
     
     // MARK: - UI Elements
     
-    private let headerLabel: UILabel = {
+    private let titleHeaderLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .label
@@ -54,13 +54,16 @@ final class HeaderView: UIView {
     
     // MARK: - Configure
     
-    func configure(_ sectionType: SectionType) {
-        switch sectionType {
-        case .main:
-            headerLabel.text = "Персональные данные"
+    func configure(userType: UserType, childrenCount: Int) {
+        switch userType {
+        case .adult:
+            titleHeaderLabel.text = "Персональные данные"
         case .child:
-            headerLabel.text = "Дети (макс. 5)"
+            titleHeaderLabel.text = "Дети (макс. 5)"
             addSubview(addChildrenButton)
+            if childrenCount >= 5 {
+                addChildrenButton.isHidden = true
+            }
             setupButtonConstraints()
         }
         
@@ -70,7 +73,7 @@ final class HeaderView: UIView {
     // MARK: - Private Methods
     
     private func setup() {
-        addSubview(headerLabel)
+        addSubview(titleHeaderLabel)
         setupConstraints()
     }
     
@@ -79,7 +82,7 @@ final class HeaderView: UIView {
     
     @objc
     private func addChildrenButtonTapped() {
-        delegate?.childrenButtonTapped()
+        delegate?.didTapChildrenButton()
     }
 }
 
@@ -89,12 +92,12 @@ final class HeaderView: UIView {
 private
 extension HeaderView {
     func setupConstraints() {
-        headerLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: topAnchor),
-            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            titleHeaderLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            titleHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            titleHeaderLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
