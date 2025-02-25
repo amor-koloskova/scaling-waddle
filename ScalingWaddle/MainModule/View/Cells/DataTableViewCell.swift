@@ -5,15 +5,18 @@
 //  Created by Amor on 18.02.2025.
 //
 
+protocol CellDelegate: AnyObject {
+    func textDidBeginEditing(in cell: DataTableViewCell, for textField: UITextField)
+}
+
 import UIKit
 
 final class DataTableViewCell: UITableViewCell {
     
     // MARK: - Dependency
     
-    var removeButtonAction: (() -> Void)?
-    
-    
+    weak var delegate: CellDelegate?    
+     
     // MARK: - Private Properties
     
     private var nameTextFieldTrailingConstraint: NSLayoutConstraint!
@@ -105,14 +108,31 @@ final class DataTableViewCell: UITableViewCell {
         contentView.addSubview(nameTextField)
         contentView.addSubview(removeButton)
         setupConstraints()
+        setupTextFields()
+    }
+    
+    private func setupTextFields() {
+        nameTextField.delegate = self
+        ageTextField.delegate = self
     }
     
     
-    // MARK: - Actions
+    // MARK: - Actions / Closures
     
     @objc
     private func removeButtonTapped() {
         removeButtonAction?()
+    }
+    
+    var removeButtonAction: (() -> Void)?
+}
+
+
+// MARK: - UITextFieldDelegate
+
+extension DataTableViewCell: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.textDidBeginEditing(in: self, for: textField)
     }
 }
 

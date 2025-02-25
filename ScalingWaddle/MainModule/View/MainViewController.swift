@@ -37,6 +37,13 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupKeyboardObservers()
+    }
+    
+    deinit {
+        
+        NotificationCenter.default.removeObserver(self)
+        
     }
     
     
@@ -47,12 +54,76 @@ final class MainViewController: UIViewController {
         view.addSubview(dataTableView)
         setupConstraints()
     }
+    
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    
+    // MARK: - Actions
+    
+    @objc
+    private func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,/*,  else { return }*/
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let animationCurveRaw = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
+              let animationCurve = UIView.AnimationCurve(rawValue: animationCurveRaw) else { return }
+        presenter?.keyboardWillShow(keyboardHeight: keyboardFrame.height, duration: duration, animationCurve: animationCurve)
+    }
+    
+    @objc
+    private func keyboardWillHide(notification: NSNotification) {
+        presenter?.keyboardWillHide()
+    }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let cell = textField.superview?.superview as? DataTableViewCell,
+              let indexPath = dataTableView.indexPath(for: cell) else { return }
+        let updatedData = cell.getUpdatedUserData()
+        presenter?.updateUserData(at: indexPath, name: updatedData.name, age: updatedData.age)
+    }
 }
 
 
 // MARK: - MainModuleViewControllerProtocol
 
 extension MainViewController: MainModuleViewControllerProtocol {
+    func adjustTableViewForKeyboard(keyboardHeight: CGFloat,
+                                    activeTextFieldFrame: CGRect,
+                                    duration: TimeInterval,
+                                    animationCurve: UIView.AnimationCurve) {
+        let visibleAreaHeight = view.frame.height - keyboardHeight
+        let textFieldBottom = activeTextFieldFrame.origin.y + activeTextFieldFrame.height * 1.5
+        let offset = textFieldBottom - visibleAreaHeight
+        if offset > 0 {
+            let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            dataTableView.contentInset = contentInset
+            dataTableView.verticalScrollIndicatorInsets = contentInset
+            
+            UIView.animate(withDuration: duration,
+                           delay: 0,
+                           options: UIView.AnimationOptions(rawValue: UInt(animationCurve.rawValue << 16)),
+                           animations: {
+                self.dataTableView.contentOffset.y += offset
+            }, completion: nil)
+        }
+    }
+    
+    func resetTableViewInsets() {
+        UIView.animate(withDuration: 0.3) {
+            self.dataTableView.contentInset = .zero
+            self.dataTableView.scrollIndicatorInsets = .zero
+        }
+    }
+    
     func reloadTableView() {
         dataTableView.reloadData()
     }
@@ -91,6 +162,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DataCell", for: indexPath) as? DataTableViewCell else {
             return UITableViewCell()
         }
+        cell.delegate = self
         let userData = presenter?.userData(at: indexPath)
         cell.configure(sectionType[indexPath.section], with: userData ?? UserModel(name: nil, age: nil, type: .adult),
                        target: self,
@@ -113,17 +185,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         footer.delegate = self
         return sectionType[section] == .child ? footer :  nil
     }
-    
-    
-    // MARK: - Actions
-    
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let cell = textField.superview?.superview as? DataTableViewCell,
-              let indexPath = dataTableView.indexPath(for: cell) else { return }
-        
-        let updatedData = cell.getUpdatedUserData()
-        presenter?.updateUserData(at: indexPath, name: updatedData.name, age: updatedData.age)
-    }
 }
 
 
@@ -141,6 +202,15 @@ extension MainViewController: HeaderViewDelegate {
 extension MainViewController: FooterViewDelegate {
     func didTapClearButton() {
         presenter?.clearButtonPressed()
+    }
+}
+
+
+// MARK: - CellDelegate
+
+extension MainViewController: CellDelegate {
+    func textDidBeginEditing(in cell: DataTableViewCell, for textField: UITextField) {
+        presenter?.textFieldDidBeginEditing(cell: cell, textField: textField)
     }
 }
 

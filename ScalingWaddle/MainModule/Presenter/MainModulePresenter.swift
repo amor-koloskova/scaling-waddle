@@ -6,24 +6,31 @@
 //
 
 import Foundation
+import UIKit
 
 protocol MainModuleViewControllerProtocol: AnyObject {
     func reloadTableView()
     func showActionSheet()
+    func adjustTableViewForKeyboard(keyboardHeight: CGFloat,
+                                    activeTextFieldFrame: CGRect,
+                                    duration: TimeInterval,
+                                    animationCurve: UIView.AnimationCurve)
+    func resetTableViewInsets()
 }
 
 protocol MainModulePresenterProtocol {
     var numberOfSections: Int { get }
     func numberOfRows(in section: Int) -> Int
     func userData(at indexPath: IndexPath) -> UserModel
-    func updateUserData(at indexPath: IndexPath,
-                        name: String?,
-                        age: String?)
+    func updateUserData(at indexPath: IndexPath, name: String?, age: String?)
     func getChildrenDataSource() -> [UserModel]
     func addChildButtonPressed()
     func clearButtonPressed()
     func removeButtonPressed(at indexPath: IndexPath)
     func clearAllData()
+    func textFieldDidBeginEditing(cell: DataTableViewCell, textField: UITextField)
+    func keyboardWillShow(keyboardHeight: CGFloat, duration: TimeInterval, animationCurve: UIView.AnimationCurve)
+    func keyboardWillHide()
 }
 
 final class MainModulePresenter {
@@ -34,13 +41,14 @@ final class MainModulePresenter {
         return UserType.allCases.count
     }
     
+    
     // MARK: - Private properties
     
     private weak var view: MainModuleViewControllerProtocol?
-    private var adultDataSource: [UserModel] = [UserModel(name: nil,
-                                                             age: nil,
-                                                             type: .adult)]
+    private var activeTextFieldFrame: CGRect?
+    private var adultDataSource: [UserModel] = [UserModel(name: nil, age: nil, type: .adult)]
     private var childrenDataSource: [UserModel] = []
+    
     
     // MARK: - Lifecycle
     
@@ -48,6 +56,7 @@ final class MainModulePresenter {
         self.view = view
     }
 }
+
 
 // MARK: - MainModulePresenterProtocol
 
@@ -71,13 +80,9 @@ extension MainModulePresenter: MainModulePresenterProtocol {
     
     func updateUserData(at indexPath: IndexPath, name: String?, age: String?) {
         if indexPath.section == 0 {
-            adultDataSource[indexPath.row] = UserModel(name: name ?? "",
-                                                         age: age ?? "",
-                                                         type: .adult)
+            adultDataSource[indexPath.row] = UserModel(name: name ?? "", age: age ?? "", type: .adult)
         } else {
-            childrenDataSource[indexPath.row] = UserModel(name: name ?? "",
-                                                          age: age ?? "",
-                                                          type: .child)
+            childrenDataSource[indexPath.row] = UserModel(name: name ?? "", age: age ?? "", type: .child)
         }
     }
     
@@ -87,9 +92,7 @@ extension MainModulePresenter: MainModulePresenterProtocol {
     
     func addChildButtonPressed() {
         if childrenDataSource.count < 5 {
-            childrenDataSource.append(UserModel(name: nil,
-                                                age: nil,
-                                                type: .child))
+            childrenDataSource.append(UserModel(name: nil, age: nil, type: .child))
             view?.reloadTableView()
         }
     }
@@ -104,10 +107,25 @@ extension MainModulePresenter: MainModulePresenterProtocol {
     }
     
     func clearAllData() {
-        adultDataSource = [UserModel(name: nil,
-                                       age: nil,
-                                       type: .adult)]
+        adultDataSource = [UserModel(name: nil, age: nil, type: .adult)]
         childrenDataSource.removeAll()
         view?.reloadTableView()
+    }
+    
+    func textFieldDidBeginEditing(cell: DataTableViewCell, textField: UITextField) {
+        let textFieldFrame = cell.convert(textField.frame, to: nil)
+        activeTextFieldFrame = textFieldFrame
+    }
+    
+    func keyboardWillShow(keyboardHeight: CGFloat, duration: TimeInterval, animationCurve: UIView.AnimationCurve) {
+        guard let activeFrame = activeTextFieldFrame else { return }
+        view?.adjustTableViewForKeyboard(keyboardHeight: keyboardHeight,
+                                         activeTextFieldFrame: activeFrame,
+                                         duration: duration,
+                                         animationCurve: animationCurve)
+    }
+    
+    func keyboardWillHide() {
+        view?.resetTableViewInsets()
     }
 }

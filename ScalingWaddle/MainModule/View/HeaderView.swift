@@ -44,7 +44,7 @@ final class HeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setup()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -72,7 +72,8 @@ final class HeaderView: UIView {
     
     // MARK: - Private Methods
     
-    private func setup() {
+    private func setupUI() {
+        backgroundColor = .systemBackground
         addSubview(titleHeaderLabel)
         setupConstraints()
     }
