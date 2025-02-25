@@ -19,6 +19,7 @@
 		31A7B3B52D6725DC00949F08 /* MainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B42D6725D300949F08 /* MainEntity.swift */; };
 		31A7B3B82D68E3AD00949F08 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B72D68E3AD00949F08 /* UserModel.swift */; };
 		31A7B3BA2D6B22B600949F08 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A7B3B92D6B22AE00949F08 /* FooterView.swift */; };
+		31D287162D6DD595003432EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D287152D6DD586003432EA /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		31A7B3B42D6725D300949F08 /* MainEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntity.swift; sourceTree = "<group>"; };
 		31A7B3B72D68E3AD00949F08 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		31A7B3B92D6B22AE00949F08 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
+		31D287152D6DD586003432EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 			children = (
 				31A7B39B2D6647B700949F08 /* Core */,
 				31A7B3A82D6647B700949F08 /* Resources */,
+				31D287172D6DD6A3003432EA /* Helpers */,
 				31A7B3A42D6647B700949F08 /* MainModule */,
 			);
 			path = ScalingWaddle;
@@ -139,6 +142,14 @@
 				31A7B3B72D68E3AD00949F08 /* UserModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		31D287172D6DD6A3003432EA /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				31D287152D6DD586003432EA /* CustomTextField.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				31A7B3B82D68E3AD00949F08 /* UserModel.swift in Sources */,
+				31D287162D6DD595003432EA /* CustomTextField.swift in Sources */,
 				31A7B3AD2D6647B700949F08 /* AppDelegate.swift in Sources */,
 				31A7B3AE2D6647B700949F08 /* SceneDelegate.swift in Sources */,
 				31A7B3BA2D6B22B600949F08 /* FooterView.swift in Sources */,

@@ -15,8 +15,8 @@ final class DataTableViewCell: UITableViewCell {
     
     // MARK: - Dependency
     
-    weak var delegate: CellDelegate?    
-     
+    weak var delegate: CellDelegate?
+    
     // MARK: - Private Properties
     
     private var nameTextFieldTrailingConstraint: NSLayoutConstraint!
@@ -27,31 +27,47 @@ final class DataTableViewCell: UITableViewCell {
     
     // MARK: - UI Elements
     
-    private let nameTextField: UITextField = {
-        let textField = UITextField()
+    private let nameTextField: CustomTextField = {
+        let textField = CustomTextField()
         textField.textColor = .label
         textField.borderStyle = .roundedRect
-        textField.attributedPlaceholder = NSAttributedString(string: "Имя",
-                                                             attributes: [NSAttributedString.Key.baselineOffset : NSNumber(20)])
+        textField.contentVerticalAlignment = .bottom
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
-    private let ageTextField: UITextField = {
-        let textField = UITextField()
+    private let ageTextField: CustomTextField = {
+        let textField = CustomTextField()
         textField.textColor = .label
         textField.borderStyle = .roundedRect
         textField.keyboardType = .numberPad
-        textField.attributedPlaceholder = NSAttributedString(string: "Возраст",
-                                                             attributes: [NSAttributedString.Key.baselineOffset : NSNumber(20)])
+        textField.contentVerticalAlignment = .bottom
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }()
+    
+    private let namePlaceholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Имя"
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let agePlaceholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Возраст"
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var removeButton: UIButton = {
         let button = UIButton()
         button.setTitle("Удалить", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         button.setTitleColor(.systemBlue, for: .normal)
         button.addTarget(self, action: #selector(removeButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -107,6 +123,8 @@ final class DataTableViewCell: UITableViewCell {
         contentView.addSubview(ageTextField)
         contentView.addSubview(nameTextField)
         contentView.addSubview(removeButton)
+        contentView.addSubview(namePlaceholderLabel)
+        contentView.addSubview(agePlaceholderLabel)
         setupConstraints()
         setupTextFields()
     }
@@ -157,7 +175,15 @@ extension DataTableViewCell {
             ageTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             ageTextFieldTrailingConstraint,
             ageTextField.heightAnchor.constraint(equalToConstant: 60),
-            ageTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            ageTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            
+            namePlaceholderLabel.topAnchor.constraint(equalTo: nameTextField.topAnchor, constant: 8),
+            namePlaceholderLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: 12),
+            namePlaceholderLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor, constant: -16),
+            
+            agePlaceholderLabel.topAnchor.constraint(equalTo: ageTextField.topAnchor, constant: 8),
+            agePlaceholderLabel.leadingAnchor.constraint(equalTo: ageTextField.leadingAnchor, constant: 12),
+            agePlaceholderLabel.trailingAnchor.constraint(equalTo: ageTextField.trailingAnchor, constant: -16)
         ])
     }
 }

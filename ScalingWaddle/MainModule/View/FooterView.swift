@@ -25,7 +25,7 @@ final class FooterView: UIView {
         button.setTitleColor(.systemRed, for: .normal)
         button.backgroundColor = .systemBackground
         button.layer.cornerRadius = 22
-        button.layer.borderWidth = 3
+        button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.systemRed.cgColor
         button.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
         return button
